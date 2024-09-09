@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단어 입력 및 랜덤 선택기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #wordList {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        #savedWords {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        #savedWords li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>단어 입력 및 랜덤 선택기</h2>
+        <input type="text" id="wordInput" placeholder="단어를 입력하세요">
+        <button onclick="addWord()">저장</button>
+        <button onclick="rollWord()">Roll</button>
+        <div id="result"></div>
+        <div id="wordList">
+            <h3>저장된 단어 목록:</h3>
+            <ul id="savedWords"></ul>
+        </div>
+    </div>
+
+    <script>
+        let words = [];
+
+        function addWord() {
+            const word = document.getElementById('wordInput').value.trim();
+            if (word) {
+                words.push(word);
+                document.getElementById('wordInput').value = '';
+                updateWordList();
+            }
+        }
+
+        function rollWord() {
+            if (words.length > 0) {
+                const randomIndex = Math.floor(Math.random() * words.length);
+                const randomWord = words[randomIndex];
+                document.getElementById('result').textContent = `선택된 단어: ${randomWord}`;
+            } else {
+                document.getElementById('result').textContent = '저장된 단어가 없습니다.';
+            }
+        }
+
+        function updateWordList() {
+            const savedWordsList = document.getElementById('savedWords');
+            savedWordsList.innerHTML = '';
+            words.forEach(word => {
+                const li = document.createElement('li');
+                li.textContent = word;
+                savedWordsList.appendChild(li);
+            });
+            savedWordsList.scrollTop = savedWordsList.scrollHeight;
+        }
+
+        // Enter 키로 단어 추가
+        document.getElementById('wordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addWord();
+            }
+        });
+    </script>
+</body>
+</html>
